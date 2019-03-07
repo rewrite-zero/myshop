@@ -1,0 +1,131 @@
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+//以下为后台路由
+//后台登录
+Route::resource('/adminlogin','Admin\AdminLoginController');
+Route::group(['middleware'=>'adminlogin'],function(){
+	//后台首页
+	Route::resource('/adminindex','Admin\AdminIndexController');
+	//管理员控制器
+	Route::resource('/admins','Admin\AdminsController');
+	//管理员删除
+	Route::get('/adminsdelete/{id}','Admin\AdminsController@delete');
+	//管理员批量删除
+	Route::get('/adminsmoredel','Admin\AdminsController@moredel');
+	//角色分配
+	Route::get('/adminsrole/{id}','Admin\AdminsController@role');
+	//保存角色分配
+	Route::post('/adminsaverole','Admin\AdminsController@saverole');
+	//后台无限分类
+	Route::resource('/admincate','Admin\CateController');
+	//ajax无限分类删除
+	Route::get('/admincatedelete/{id}','Admin\CateController@delete');
+	//角色控制器
+	Route::resource('/adminrolelist','Admin\RolelistController');
+	//角色删除
+	Route::get('/adminroledel/{id}','Admin\RolelistController@delete');
+	//批量删除角色
+	Route::get('/adminrolemoredel','Admin\RolelistController@moredel');
+	//分配权限
+	Route::get('/adminroleauth/{id}','Admin\RolelistController@auth');
+	//保存权限
+	Route::post('/adminsaveauth','Admin\RolelistController@saveauth');
+	//节点管理
+	Route::resource('/adminnodelist','Admin\NodelistController');
+	//节点删除
+	Route::get('/adminnodedelete/{id}','Admin\NodelistController@delete');
+	//节点批量删除
+	Route::get('/adminnodemoredel','Admin\NodelistController@moredel');
+	//公告管理
+	Route::resource('/adminarticle','Admin\ArticleController');
+	//修改公告状态
+	Route::get('/adminarticlestatus/{id}','Admin\ArticleController@changeStatus');
+	//删除公告
+	Route::get('/adminarticledel/{id}','Admin\ArticleController@del');
+	//批量删除公告
+	Route::get('/adminarticlemoredel','Admin\ArticleController@moredel');
+	//商品管理
+	Route::resource('/goodslist','Admin\GoodsController');
+	//删除商品
+	Route::get('/goodslistdel/{id}','Admin\GoodsController@del');
+	//批量删除商品
+	Route::get('/goodslistmoredel','Admin\GoodsController@moredel');
+	//商品状态修改
+	Route::get('/goodslistchangeStatus/{id}','Admin\GoodsController@changeStatus');
+	//订单管理
+	Route::resource('adminorder','Admin\OrderController');
+	//订单状态修改
+	Route::get('/orderstatus/{id}','Admin\OrderController@status');
+	//会员管理
+	Route::resource('/adminuser','Admin\UserController');
+});
+
+//以下为前台路由
+//前台注册
+Route::resource('/homeregister','Home\RegisterController');
+//验证码
+Route::get('/vcode','Home\RegisterController@vcode');
+//测试邮件发送
+Route::get('/sendmail','Home\RegisterController@sendmail');
+//发送邮件
+Route::get('/send','Home\RegisterController@send');
+//激活用户
+Route::get('/jihuo','Home\RegisterController@jihuo');
+//自定义函数调用
+Route::get('/fun','Home\RegisterController@index1');
+//短信接口调用
+Route::get('/phone','Home\RegisterController@index3');
+//手机短信注册
+Route::get('/phoneregister','Home\RegisterController@phoneregister');
+//处理手机注册
+Route::post('/dophone','Home\RegisterController@dophone');
+// //处理验证码
+// Route::get('/docode','Home\RegisterController@docode');
+//登录
+Route::resource('/homelogin','Home\LoginController');
+//商城首页
+Route::resource('/homeindex','Home\IndexController');
+//退出登录
+Route::get('/outlogin','Home\IndexController@outlogin');
+//商城公告
+Route::resource('/homearticle','Home\ArticleController');
+//搜索公告
+Route::get('/articlefind','Home\ArticleController@find');
+//商品详情
+Route::resource('/homegood','Home\GoodsController');
+//购物车
+Route::resource('/homecart','Home\CartController');
+//修改购物车数量
+//手动
+Route::get('/carthand','Home\CartController@hand');
+//减号
+Route::get('/cartreduce','Home\CartController@reduce');
+//加号
+Route::get('/cartadd','Home\CartController@add');
+//删除购物车商品
+Route::get('/cartdel','Home\CartController@del');
+//清空购物车商品
+Route::get('/cartclear','Home\CartController@clear');
+
+Route::group(['middleware'=>'homelogin'],function(){
+	//订单表
+	Route::resource('/homeorder','Home\OrderController');
+	//城市级联
+	Route::get('/ordercity','Home\OrderController@city');
+	//收货地址
+	Route::post('/addressadd','Home\OrderController@addressadd');
+	//删除收货地址
+	Route::get('addressdel/{id}','Home\OrderController@addressdel');
+	//用户中心
+	Route::resource('/homeuser','Home\UserController');
+});
